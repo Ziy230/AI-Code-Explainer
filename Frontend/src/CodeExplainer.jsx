@@ -7,6 +7,7 @@ import {
 
 import "./CodeExplainer.css";
 import { MyContext } from "./MyContext.jsx";
+import API_URL from "./api.js";
 
 function CodeExplainer() {
     const {
@@ -31,12 +32,13 @@ function CodeExplainer() {
 
     const submittingRef = useRef(false);
 
-    // Used to automatically scroll to the analysis
     const resultRef = useRef(null);
 
 
     // AUTO SCROLL TO SELECTED ANALYSIS
+
     useEffect(() => {
+
         if (!selectedAnalysisId) {
             return;
         }
@@ -54,6 +56,7 @@ function CodeExplainer() {
 
 
     // LOAD SELECTED THREAD
+
     useEffect(() => {
 
         if (!currThreadId) {
@@ -67,7 +70,6 @@ function CodeExplainer() {
 
             return;
         }
-
 
         if (
             !prevChats ||
@@ -83,28 +85,23 @@ function CodeExplainer() {
             return;
         }
 
-
         const latest =
             prevChats[
                 prevChats.length - 1
             ];
 
-
         setCode(
             latest.code || ""
         );
-
 
         setLanguage(
             latest.language ||
             "Python"
         );
 
-
         setSelectedAnalysisId(
             latest._id
         );
-
 
         setSelectedAnalysisTitle(
             latest.title ||
@@ -112,9 +109,7 @@ function CodeExplainer() {
             "Code Analysis"
         );
 
-
         setResult({
-
             language:
                 latest.language,
 
@@ -155,9 +150,7 @@ function CodeExplainer() {
                     latest.suggestions || []
 
             }
-
         });
-
 
         setError("");
 
@@ -168,12 +161,12 @@ function CodeExplainer() {
 
 
     // EXPLAIN CODE
+
     const handleExplain = async () => {
 
         if (submittingRef.current) {
             return;
         }
-
 
         if (!code.trim()) {
 
@@ -184,25 +177,23 @@ function CodeExplainer() {
             return;
         }
 
-
         submittingRef.current = true;
 
         setLoading(true);
         setError("");
 
-
         let activeThreadId =
             currThreadId;
-
 
         try {
 
             // CREATE THREAD ONLY WHEN NEEDED
+
             if (!activeThreadId) {
 
                 const threadResponse =
                     await fetch(
-                        "http://localhost:8080/api/code/thread",
+                        `${API_URL}/api/code/thread`,
                         {
                             method: "POST",
                             credentials: "include",
@@ -213,10 +204,8 @@ function CodeExplainer() {
                         }
                     );
 
-
                 const threadData =
                     await threadResponse.json();
-
 
                 if (!threadResponse.ok) {
 
@@ -224,17 +213,15 @@ function CodeExplainer() {
                         threadData.error ||
                         "Failed to create code thread"
                     );
-                }
 
+                }
 
                 activeThreadId =
                     threadData.threadId;
 
-
                 setCurrThreadId(
                     activeThreadId
                 );
-
 
                 setAllThreads(prev => [
 
@@ -254,7 +241,6 @@ function CodeExplainer() {
 
                 ]);
 
-
                 console.log(
                     "Code thread created:",
                     threadData
@@ -263,9 +249,10 @@ function CodeExplainer() {
 
 
             // REQUEST AI ANALYSIS
+
             const response =
                 await fetch(
-                    "http://localhost:8080/api/code/explain",
+                    `${API_URL}/api/code/explain`,
                     {
                         method: "POST",
 
@@ -289,14 +276,11 @@ function CodeExplainer() {
                                 code
 
                         })
-
                     }
                 );
 
-
             const data =
                 await response.json();
-
 
             if (!response.ok) {
 
@@ -304,23 +288,20 @@ function CodeExplainer() {
                     data.error ||
                     "Failed to explain code"
                 );
+
             }
 
-
             setResult(data);
-
 
             setSelectedAnalysisId(
                 data.analysisId
             );
-
 
             setSelectedAnalysisTitle(
                 data.analysis?.title ||
                 data.analysis?.codeType ||
                 "Code Analysis"
             );
-
 
             console.log(
                 "Code explanation:",
@@ -329,46 +310,43 @@ function CodeExplainer() {
 
 
             // LOAD ALL ANALYSES
+
             const analysesResponse =
                 await fetch(
-                    `http://localhost:8080/api/code/thread/${activeThreadId}`,
+                    `${API_URL}/api/code/thread/${activeThreadId}`,
                     {
                         credentials:
                             "include"
                     }
                 );
-
 
             if (analysesResponse.ok) {
 
                 const analysesData =
                     await analysesResponse.json();
 
-
                 setPrevChats(
                     analysesData.analyses ||
                     []
                 );
-
             }
 
 
             // REFRESH SIDEBAR
+
             const threadsResponse =
                 await fetch(
-                    "http://localhost:8080/api/code/threads",
+                    `${API_URL}/api/code/threads`,
                     {
                         credentials:
                             "include"
                     }
                 );
 
-
             if (threadsResponse.ok) {
 
                 const threadsData =
                     await threadsResponse.json();
-
 
                 setAllThreads(
                     threadsData.threads.map(
@@ -383,9 +361,7 @@ function CodeExplainer() {
                         })
                     )
                 );
-
             }
-
 
         } catch (err) {
 
@@ -394,11 +370,9 @@ function CodeExplainer() {
                 err
             );
 
-
             setError(
                 err.message
             );
-
 
         } finally {
 
@@ -413,6 +387,7 @@ function CodeExplainer() {
 
 
     // OPEN PREVIOUS ANALYSIS
+
     const openPreviousAnalysis =
         (analysis) => {
 
@@ -420,24 +395,20 @@ function CodeExplainer() {
                 analysis.code || ""
             );
 
-
             setLanguage(
                 analysis.language ||
                 "Python"
             );
 
-
             setSelectedAnalysisId(
                 analysis._id
             );
-
 
             setSelectedAnalysisTitle(
                 analysis.title ||
                 analysis.codeType ||
                 "Code Analysis"
             );
-
 
             setResult({
 
@@ -484,7 +455,6 @@ function CodeExplainer() {
 
             });
 
-
             setError("");
 
         };
@@ -502,7 +472,6 @@ function CodeExplainer() {
                 <h1>
                     AI Code Explainer
                 </h1>
-
 
                 <p>
                     Understand, analyze and improve
@@ -522,19 +491,14 @@ function CodeExplainer() {
                         Code
                     </span>
 
-
                     <select
-
                         value={language}
-
                         onChange={(e) =>
                             setLanguage(
                                 e.target.value
                             )
                         }
-
                         disabled={loading}
-
                     >
 
                         <option value="Python">
@@ -597,21 +561,15 @@ function CodeExplainer() {
 
 
                     <textarea
-
                         value={code}
-
                         onChange={(e) =>
                             setCode(
                                 e.target.value
                             )
                         }
-
                         placeholder="Paste or write your code here..."
-
                         spellCheck={false}
-
                         disabled={loading}
-
                     />
 
                 </div>
@@ -622,15 +580,11 @@ function CodeExplainer() {
             {/* EXPLAIN BUTTON */}
 
             <button
-
                 className="explainButton"
-
                 onClick={
                     handleExplain
                 }
-
                 disabled={loading}
-
             >
 
                 {loading
@@ -645,9 +599,7 @@ function CodeExplainer() {
             {error && (
 
                 <div className="codeError">
-
                     {error}
-
                 </div>
 
             )}
@@ -703,13 +655,9 @@ function CodeExplainer() {
                             Previous Analyses
                         </h2>
 
-
                         {prevChats
-
                             .slice(0, -1)
-
                             .reverse()
-
                             .map(
                                 (
                                     analysis,
@@ -717,7 +665,6 @@ function CodeExplainer() {
                                 ) => (
 
                                     <div
-
                                         className={
                                             `previousAnalysis ${
                                                 selectedAnalysisId ===
@@ -737,7 +684,6 @@ function CodeExplainer() {
                                                 analysis
                                             )
                                         }
-
                                     >
 
                                         <div className="previousAnalysisHeader">
@@ -747,7 +693,6 @@ function CodeExplainer() {
                                                     analysis.language
                                                 }
                                             </span>
-
 
                                             <span>
                                                 {
@@ -796,7 +741,6 @@ function AnalysisResult({
                     🧩 Code Type
                 </h2>
 
-
                 <div className="codeTypeValue">
 
                     {analysis.codeType}
@@ -812,7 +756,6 @@ function AnalysisResult({
                     🧠 Overview
                 </h2>
 
-
                 <p>
                     {analysis.overview}
                 </p>
@@ -825,7 +768,6 @@ function AnalysisResult({
                 <h2>
                     ⚙️ How It Works
                 </h2>
-
 
                 <ol>
 
@@ -856,7 +798,6 @@ function AnalysisResult({
                     🔄 Algorithm
                 </h2>
 
-
                 <p>
                     {analysis.algorithm}
                 </p>
@@ -869,7 +810,6 @@ function AnalysisResult({
                 <h2>
                     ⏱️ Time Complexity
                 </h2>
-
 
                 <p>
                     {analysis.timeComplexity}
@@ -884,7 +824,6 @@ function AnalysisResult({
                     💾 Space Complexity
                 </h2>
 
-
                 <p>
                     {analysis.spaceComplexity}
                 </p>
@@ -897,7 +836,6 @@ function AnalysisResult({
                 <h2>
                     🐛 Potential Issues
                 </h2>
-
 
                 {analysis.issues?.length > 0 ? (
 
@@ -936,7 +874,6 @@ function AnalysisResult({
                 <h2>
                     🚀 Suggestions
                 </h2>
-
 
                 {analysis.suggestions?.length > 0 ? (
 

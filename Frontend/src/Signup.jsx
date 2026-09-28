@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Signup.css";
+import API_URL from "./api.js";
 
 function Signup({ onSignupSuccess, onGoToLogin }) {
 
@@ -20,7 +21,7 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/api/auth/signup",
+                `${API_URL}/api/auth/signup`,
                 {
                     method: "POST",
                     headers: {
@@ -40,13 +41,18 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
 
             if (response.ok) {
 
-                alert("Signup successful! Please login.");
+                alert(
+                    "Signup successful! Please login."
+                );
 
                 onSignupSuccess();
 
             } else {
 
-                setError(data.error || "Signup failed");
+                setError(
+                    data.error ||
+                    "Signup failed"
+                );
 
             }
 
@@ -54,7 +60,9 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
 
             console.log(err);
 
-            setError("Unable to connect to server");
+            setError(
+                "Unable to connect to server"
+            );
 
         } finally {
 
@@ -69,13 +77,17 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
             <div className="authCard">
 
                 <div className="authLogo">
+
                     <img
                         src="/src/assets/blacklogo.png"
                         alt="SigmaGPT"
                     />
+
                 </div>
 
-                <h1>Create your account</h1>
+                <h1>
+                    Create your account
+                </h1>
 
                 <p className="authSubtitle">
                     Join SigmaGPT and start chatting
@@ -93,7 +105,11 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
                         type="text"
                         placeholder="Username"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) =>
+                            setUsername(
+                                e.target.value
+                            )
+                        }
                         required
                     />
 
@@ -101,7 +117,11 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
                         type="email"
                         placeholder="Email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) =>
+                            setEmail(
+                                e.target.value
+                            )
+                        }
                         required
                     />
 
@@ -109,7 +129,11 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
                         type="password"
                         placeholder="Password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) =>
+                            setPassword(
+                                e.target.value
+                            )
+                        }
                         required
                     />
 
@@ -117,7 +141,9 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
                         type="submit"
                         disabled={loading}
                     >
-                        {loading ? "Creating account..." : "Sign Up"}
+                        {loading
+                            ? "Creating account..."
+                            : "Sign Up"}
                     </button>
 
                 </form>
@@ -128,7 +154,9 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
                         Already have an account?
                     </span>
 
-                    <button onClick={onGoToLogin}>
+                    <button
+                        onClick={onGoToLogin}
+                    >
                         Login
                     </button>
 

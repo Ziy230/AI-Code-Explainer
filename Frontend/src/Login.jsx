@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Login.css";
+import API_URL from "./api.js";
 
 function Login({ onLogin, onGoToSignup }) {
 
@@ -18,7 +19,7 @@ function Login({ onLogin, onGoToSignup }) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/api/auth/login",
+                `${API_URL}/api/auth/login`,
                 {
                     method: "POST",
                     credentials: "include",
@@ -40,14 +41,19 @@ function Login({ onLogin, onGoToSignup }) {
 
             } else {
 
-                setError(data.error || "Invalid username or password");
+                setError(
+                    data.error ||
+                    "Invalid username or password"
+                );
 
             }
 
         } catch (err) {
 
             console.log(err);
-            setError("Unable to connect to server");
+            setError(
+                "Unable to connect to server"
+            );
 
         } finally {
 
@@ -63,13 +69,17 @@ function Login({ onLogin, onGoToSignup }) {
             <div className="authCard">
 
                 <div className="authLogo">
+
                     <img
                         src="/src/assets/blacklogo.png"
                         alt="SigmaGPT"
                     />
+
                 </div>
 
-                <h1>Welcome to SigmaGPT</h1>
+                <h1>
+                    Welcome to SigmaGPT
+                </h1>
 
                 <p className="authSubtitle">
                     Login to continue chatting with SigmaGPT
@@ -87,7 +97,11 @@ function Login({ onLogin, onGoToSignup }) {
                         type="text"
                         placeholder="Username"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) =>
+                            setUsername(
+                                e.target.value
+                            )
+                        }
                         required
                     />
 
@@ -95,7 +109,11 @@ function Login({ onLogin, onGoToSignup }) {
                         type="password"
                         placeholder="Password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) =>
+                            setPassword(
+                                e.target.value
+                            )
+                        }
                         required
                     />
 
@@ -103,7 +121,9 @@ function Login({ onLogin, onGoToSignup }) {
                         type="submit"
                         disabled={loading}
                     >
-                        {loading ? "Logging in..." : "Login"}
+                        {loading
+                            ? "Logging in..."
+                            : "Login"}
                     </button>
 
                 </form>
@@ -114,7 +134,9 @@ function Login({ onLogin, onGoToSignup }) {
                         Don't have an account?
                     </span>
 
-                    <button onClick={onGoToSignup}>
+                    <button
+                        onClick={onGoToSignup}
+                    >
                         Sign Up
                     </button>
 

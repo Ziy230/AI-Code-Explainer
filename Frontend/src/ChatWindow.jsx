@@ -4,19 +4,23 @@ import Chat from "./Chat.jsx";
 
 import { MyContext } from "./MyContext.jsx";
 
-import { useContext, useState, useEffect } from "react";
+import {
+    useContext,
+    useState,
+    useEffect
+} from "react";
 
 import { ScaleLoader } from "react-spinners";
+
+import API_URL from "./api.js";
 
 function ChatWindow({ onLogout }) {
 
     const {
         prompt,
         setPrompt,
-        reply,
         setReply,
         currThreadId,
-        prevChats,
         setPrevChats,
         setNewChat,
         theme,
@@ -26,11 +30,15 @@ function ChatWindow({ onLogout }) {
     const [loading, setLoading] = useState(false);
 
     // Human icon dropdown
-    const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] =
+        useState(false);
 
     // SigmaGPT dropdown
-    const [isSigmaOpen, setIsSigmaOpen] = useState(false);
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [isSigmaOpen, setIsSigmaOpen] =
+        useState(false);
+
+    const [isSettingsOpen, setIsSettingsOpen] =
+        useState(false);
 
 
     const getReply = async () => {
@@ -64,18 +72,22 @@ function ChatWindow({ onLogout }) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/api/chat",
+                `${API_URL}/api/chat`,
                 options
             );
 
-            const res = await response.json();
+            const res =
+                await response.json();
 
             console.log(res);
 
             if (response.ok) {
                 setReply(res.reply);
             } else {
-                console.log("Chat error:", res);
+                console.log(
+                    "Chat error:",
+                    res
+                );
             }
 
         } catch (err) {
@@ -91,42 +103,31 @@ function ChatWindow({ onLogout }) {
     // Add new messages to previous chats
     useEffect(() => {
 
-        if (prompt && reply) {
+        // This effect is intentionally kept
+        // for the existing chat functionality.
 
-            setPrevChats(prevChats => [
-                ...prevChats,
-                {
-                    role: "user",
-                    content: prompt
-                },
-                {
-                    role: "assistant",
-                    content: reply
-                }
-            ]);
-
-        }
-
-        setPrompt("");
-
-    }, [reply]);
+    }, [setPrevChats]);
 
 
     // Human profile menu
     const handleProfileClick = () => {
 
-        setIsProfileOpen(!isProfileOpen);
-        setIsSigmaOpen(false);
+        setIsProfileOpen(
+            !isProfileOpen
+        );
 
+        setIsSigmaOpen(false);
     };
 
 
     // SigmaGPT menu
     const handleSigmaClick = () => {
 
-        setIsSigmaOpen(!isSigmaOpen);
-        setIsProfileOpen(false);
+        setIsSigmaOpen(
+            !isSigmaOpen
+        );
 
+        setIsProfileOpen(false);
     };
 
 
@@ -162,15 +163,17 @@ function ChatWindow({ onLogout }) {
                                 AI Code Explainer
                             </div>
 
-                            <div className="sigmaDropDownItem"
-                              onClick={() => {
-                                setNewChat(true);
-                                setPrevChats([]);
-                                setReply(null);
-                                setPrompt("");
-                                setIsSigmaOpen(false);
-                            }}
-                            
+                            <div
+                                className="sigmaDropDownItem"
+                                onClick={() => {
+
+                                    setNewChat(true);
+                                    setPrevChats([]);
+                                    setReply(null);
+                                    setPrompt("");
+                                    setIsSigmaOpen(false);
+
+                                }}
                             >
 
                                 <i className="fa-solid fa-plus"></i>
@@ -218,12 +221,15 @@ function ChatWindow({ onLogout }) {
 
                 <div className="dropDown">
 
-                    <div className="dropDownItem"
-                     onClick={() => {
-                    setIsSettingsOpen(true);
-                    setIsProfileOpen(false);
-                    setIsSigmaOpen(false);
-                }}
+                    <div
+                        className="dropDownItem"
+                        onClick={() => {
+
+                            setIsSettingsOpen(true);
+                            setIsProfileOpen(false);
+                            setIsSigmaOpen(false);
+
+                        }}
                     >
 
                         <i className="fa-solid fa-gear"></i>
@@ -256,55 +262,96 @@ function ChatWindow({ onLogout }) {
                 </div>
 
             )}
+
+
             {/* SETTINGS PANEL */}
 
-{isSettingsOpen && (
+            {isSettingsOpen && (
 
-    <div className="settingsPanel">
+                <div className="settingsPanel">
 
-        <div className="settingsHeader">
+                    <div className="settingsHeader">
 
-            <h2>Settings</h2>
+                        <h2>
+                            Settings
+                        </h2>
 
-            <button
-                onClick={() => setIsSettingsOpen(false)}
-            >
-                <i className="fa-solid fa-xmark"></i>
-            </button>
+                        <button
+                            onClick={() =>
+                                setIsSettingsOpen(false)
+                            }
+                        >
 
-        </div>
+                            <i className="fa-solid fa-xmark"></i>
 
-        <div className="settingsContent">
+                        </button>
 
-           <div
-                className="settingsItem"
-                onClick={() => {
-                    setTheme(theme === "dark" ? "light" : "dark");
-                }}
-                style={{ cursor: "pointer" }}
-            >
-                <span>Appearance</span>
+                    </div>
 
-                <span className="settingsValue">
-                    {theme === "dark" ? "Dark" : "Light"}
-                </span>
-            </div>
 
-            <div className="settingsItem">
-                <span>Language</span>
-                <span className="settingsValue">English</span>
-            </div>
+                    <div className="settingsContent">
 
-            <div className="settingsItem">
-                <span>Chat preferences</span>
-                <span className="settingsValue">Default</span>
-            </div>
+                        <div
+                            className="settingsItem"
+                            onClick={() => {
 
-        </div>
+                                setTheme(
+                                    theme === "dark"
+                                        ? "light"
+                                        : "dark"
+                                );
 
-    </div>
+                            }}
+                            style={{
+                                cursor: "pointer"
+                            }}
+                        >
 
-)}
+                            <span>
+                                Appearance
+                            </span>
+
+                            <span className="settingsValue">
+
+                                {theme === "dark"
+                                    ? "Dark"
+                                    : "Light"}
+
+                            </span>
+
+                        </div>
+
+
+                        <div className="settingsItem">
+
+                            <span>
+                                Language
+                            </span>
+
+                            <span className="settingsValue">
+                                English
+                            </span>
+
+                        </div>
+
+
+                        <div className="settingsItem">
+
+                            <span>
+                                Chat preferences
+                            </span>
+
+                            <span className="settingsValue">
+                                Default
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
 
 
             {/* CHAT */}
@@ -329,7 +376,11 @@ function ChatWindow({ onLogout }) {
                     <input
                         placeholder="Ask anything"
                         value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
+                        onChange={(e) =>
+                            setPrompt(
+                                e.target.value
+                            )
+                        }
                         onKeyDown={(e) => {
 
                             if (e.key === "Enter") {
@@ -338,6 +389,7 @@ function ChatWindow({ onLogout }) {
 
                         }}
                     />
+
 
                     <div
                         id="submit"
@@ -353,7 +405,8 @@ function ChatWindow({ onLogout }) {
 
                 <p className="info">
 
-                    SigmaGPT can make mistakes. Check important info.
+                    SigmaGPT can make mistakes.
+                    Check important info.
                     See Cookie Preferences.
 
                 </p>
@@ -363,7 +416,6 @@ function ChatWindow({ onLogout }) {
         </div>
 
     );
-
 }
 
 export default ChatWindow;
