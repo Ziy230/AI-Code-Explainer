@@ -78,11 +78,11 @@ function Login({ onLogin, onGoToSignup }) {
                 </div>
 
                 <h1>
-                    Welcome to SigmaGPT
+                    Welcome to AI Code Explainer
                 </h1>
 
                 <p className="authSubtitle">
-                    Login to continue chatting with SigmaGPT
+                    Login to continue AI Code Explainer
                 </p>
 
                 {error && (
