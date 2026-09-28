@@ -1,0 +1,94 @@
+* {
+    color: #ececec;
+    font-family: Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.app {
+    background-color: #212121;
+    display: flex;
+}
+/* Light theme */
+
+.app.light {
+    background-color: #f7f7f8;
+}
+
+.app.light .chatWindow {
+    background-color: #f7f7f8;
+}
+
+.app.light .navbar {
+    color: #202123;
+}
+
+.app.light input {
+    background-color: #ffffff;
+    color: #202123;
+    border: 1px solid #dddddd;
+}
+
+.app.light input::placeholder {
+    color: #777;
+}
+
+.app.light .info {
+    color: #666;
+}
+
+.app.light .userIcon {
+    color: white;
+}
+/* Light theme text */
+
+.app.light {
+    color: #202123;
+}
+
+.app.light * {
+    color: #202123;
+}
+
+.app.light .info {
+    color: #666;
+}
+
+.app.light .userIcon {
+    color: white;
+}
+
+.app.light .sigmaDropDownItem {
+    color: #202123;
+}
+
+.app.light .sigmaDropDownItem i {
+    color: #202123;
+}
+
+.app.light .dropDownItem {
+    color: #f5f5f5;
+}
+
+.app.light .dropDownItem i {
+    color: #f5f5f5;
+}
+
+.app.light .settingsHeader h2 {
+    color: #202123;
+}
+
+.app.light .settingsHeader button {
+    color: #666;
+}
+
+.app.light .settingsItem {
+    color: #202123;
+}
+
+.app.light .settingsValue {
+    color: #666;
+}
