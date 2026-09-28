@@ -70,11 +70,6 @@ function Login({ onLogin, onGoToSignup }) {
 
                 <div className="authLogo">
 
-                    <img
-                        src="/src/assets/blacklogo.png"
-                        alt="SigmaGPT"
-                    />
-
                 </div>
 
                 <h1>
