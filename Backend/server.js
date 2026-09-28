@@ -18,7 +18,7 @@ const PORT = 8080;
 
 app.use(
     session({
-        secret: "SigmaGPTSecret",
+        secret: process.env.SECRET,
         resave: false,
         saveUninitialized: false,
         store: MongoStore.create({
